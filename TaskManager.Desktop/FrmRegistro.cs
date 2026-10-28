@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Task.Entities;
 using Task.Entities.Enumerators;
+using Task.LogicaNegocio;
 using TaskManager.Desktop.Helpers; 
 #endregion
 
@@ -26,18 +27,17 @@ namespace TaskManager.Desktop
         {
             if (!IsValidForm())
                 return;
-
-            NuevaCuenta = new Cuenta()
+            ManagerAutenticacion managerAutenticacion = new ManagerAutenticacion();
+            try
             {
-                Owner = new Administrador()
-                {
-                    Nombre = txtNombre.Text,
-                    Email = txtEmail.Text,
-                    Password = txtPassword.Text
-                },
-                TipoCuenta = TipoCuenta.Personal
-            };
-            this.DialogResult = DialogResult.OK;
+                NuevaCuenta = managerAutenticacion
+                        .CrearCuenta(txtNombre.Text, txtEmail.Text, txtPassword.Text);
+                this.DialogResult = DialogResult.OK;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             this.Close();
         }
 

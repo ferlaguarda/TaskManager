@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="Task.Entities/Task.Entities.csproj" />
+  <Project Path="Task.LogicaNegocio/Task.LogicaNegocio.csproj" Id="cb1750d3-5734-424e-97b6-bd770a757b43" />
   <Project Path="TaskManager.Desktop/TaskManager.Desktop.csproj" Id="13ba3292-056d-432b-ada4-07e540d43df4" />
   <Project Path="TaskManagerConsole/TaskManagerConsole.csproj" Id="d8b3e02a-efcb-446d-a384-f922e11ff4eb" />
-  <Project Path="WpfTaskManager/WpfTaskManager.csproj" Id="6455492c-8c84-40d5-9dcc-b1084f1f6f8a" />
+  <Project Path="Tesk.Persistencia/Tesk.Persistencia.csproj" Id="a385ac18-4002-409b-b656-003af145560e" />
 </Solution>
