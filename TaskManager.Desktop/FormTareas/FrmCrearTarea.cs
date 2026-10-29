@@ -1,14 +1,17 @@
 ﻿using Task.Entities;
+using Task.LogicaNegocio;
 
 namespace TaskManager.Desktop.FormTareas
 {
     public partial class FrmCrearTarea : Form
     {
         public Tarea NuevaTarea { get; private set; }
+        private Guid _idCuenta;
 
-        public FrmCrearTarea()
+        public FrmCrearTarea(Guid idCuenta)
         {
             InitializeComponent();
+            _idCuenta = idCuenta;
             cboPrioridades.DataSource = Enum.GetValues(typeof(Task.Entities.Enumerators.Prioridad));
         }
 
@@ -21,6 +24,7 @@ namespace TaskManager.Desktop.FormTareas
         {
             NuevaTarea = new Tarea()
             {
+                IdCuenta = _idCuenta,
                 Nombre = txtNombre.Text,
                 Descripcion = txtDescripcion.Text,
                 FechaExpiracion = dtpExpiracion.Value,
@@ -31,8 +35,19 @@ namespace TaskManager.Desktop.FormTareas
                 FechaCreacion = DateTime.Now,
                 State = Task.Entities.Enumerators.EstadoTarea.Pendiente
             };
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            ManagerTareas manager = new ManagerTareas();
+            try
+            {
+                manager.CrearTarea(NuevaTarea);
+                MessageBox.Show($"Se ha creado la tarea correctamente.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear la tarea: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
         }
     }
 }

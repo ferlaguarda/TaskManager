@@ -29,8 +29,10 @@ namespace Task.LogicaNegocio
             // Investigar como aplicarlo con Expresiones regulares (Regex) en C#.
 
             //Validar existencia de cuenta con el mismo correo
-            
-            
+            var cuenta = _cuentaDal.BuscarCuentaPorOwner(correo);
+            if(cuenta != null)
+                throw new Exception("Ya existe una cuenta vinculada a este correo electrónico.");
+
             var nuevaCuenta = new Cuenta()
             {
                 Owner = new Administrador()
@@ -45,5 +47,23 @@ namespace Task.LogicaNegocio
             return nuevaCuenta;
         }
 
+        public Cuenta Login(string contrasenia, string correo)
+        {
+            //Validar datos de entrada
+            if (string.IsNullOrEmpty(correo))
+                throw new ArgumentException("El E-Mail no puede estar vacío.");
+            if (string.IsNullOrEmpty(contrasenia))
+                throw new ArgumentException("La contraseña es requerida.");
+
+            var cuenta = _cuentaDal.BuscarCuentaPorOwner(correo);
+            if (cuenta == null)
+                throw new Exception("Los datos proporcionados no son correctos.");
+            else
+            {
+                if(cuenta.Owner.Password != contrasenia)
+                    throw new Exception("Los datos proporcionados no son correctos.");
+            }
+            return cuenta;
+        }
     }
 }

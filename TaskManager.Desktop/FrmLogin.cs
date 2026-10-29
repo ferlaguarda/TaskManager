@@ -1,5 +1,6 @@
 #region Using
 using Task.Entities;
+using Task.LogicaNegocio;
 using TaskManager.Desktop.Helpers; 
 #endregion
 
@@ -7,11 +8,9 @@ namespace TaskManager.Desktop
 {
     public partial class FrmLogin : Form
     {
-        private List<Cuenta> _cuentasCreadas;
         public FrmLogin()
         {
             InitializeComponent();
-            _cuentasCreadas = [];
         }
 
         private void BtnSalir_Click(object sender, EventArgs e)
@@ -24,41 +23,26 @@ namespace TaskManager.Desktop
             if (!IsValidForm())
                 return;
 
-            bool credencialesValidas = false;
-            Cuenta? miCuenta = null;
-            foreach (var cuenta in _cuentasCreadas)
+            ManagerAutenticacion managerAutenticacion = new ManagerAutenticacion();
+            try
             {
-                if (cuenta.Owner.Email == txtEmail.Text)
+                Cuenta miCuenta = managerAutenticacion.Login(txtPassword.Text, txtEmail.Text);
+                FrmMain frmMain = new FrmMain(miCuenta);
+                this.Hide();
+                DialogResult result = frmMain.ShowDialog();
+                if (result == DialogResult.Cancel)
                 {
-                    if (cuenta.Owner.Password == txtPassword.Text)
-                    {
-                        credencialesValidas = true;
-                        miCuenta = cuenta;
-                        break;
-                    }
+                    this.Show();
+                }
+                else if (result == DialogResult.Abort)
+                {
+                    Application.Exit();
                 }
             }
-            if (credencialesValidas)
+            catch (Exception ex)
             {
-                if (miCuenta != null)
-                {
-                    FrmMain frmMain = new FrmMain(miCuenta);
-                    this.Hide();
-                    DialogResult result = frmMain.ShowDialog();
-                    if(result == DialogResult.Cancel)
-                    {
-                        this.Show();
-                    }
-                    else if(result == DialogResult.Abort)
-                    {
-                        Application.Exit();
-                    }
-                }
+                MessageBox.Show(ex.Message,"Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            else
-                MessageBox.Show($"Los datos proporcionados no son validos.",
-                "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
         }
 
         private void LinkRegistro_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -68,7 +52,6 @@ namespace TaskManager.Desktop
             if (result == DialogResult.OK)
             {
                 txtEmail.Text = frmRegistro.NuevaCuenta.Owner.Email;
-                _cuentasCreadas.Add(frmRegistro.NuevaCuenta);
             }
         }
         private bool IsValidForm()

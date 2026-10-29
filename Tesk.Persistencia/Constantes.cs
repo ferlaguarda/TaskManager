@@ -4,5 +4,6 @@
     {
         internal const string RUTA_ARCHIVOS = "C:\\Temporales\\Task.Files";
         internal const string ARCHIVO_CUENTAS = "cuentas";
+        internal const string ARCHIVO_TAREAS = "tareas";
     }
 }
