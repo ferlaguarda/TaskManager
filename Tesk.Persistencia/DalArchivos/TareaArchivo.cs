@@ -9,6 +9,7 @@ namespace Tesk.Persistencia.DalArchivos
         private readonly string filePath = Path
             .Combine(Constantes.RUTA_ARCHIVOS, $"{Constantes.ARCHIVO_TAREAS}.json");
 
+        private IFileProvider _fileProvider = new FileProviders.JsonFileProvider();
 
         public List<Tarea> BuscarTareas(Guid idCuenta)
         {
@@ -19,19 +20,14 @@ namespace Tesk.Persistencia.DalArchivos
         {
             List<Tarea> tareas = LeerTareas();
             tareas.Add(tarea);
-            var fileContent = JsonSerializer.Serialize(tareas);
-            File.WriteAllText(filePath, fileContent);
+            _fileProvider.GuardarRegistros(filePath, tareas);
             return tarea.Id;
         }
 
         public List<Tarea> LeerTareas()
         {
-            if (!File.Exists(filePath))
-                return new List<Tarea>();
-
-            var fileContent = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<Tarea>>(fileContent) ??
-                new List<Tarea>();
+            return _fileProvider.LeerRegistros<Tarea>(filePath);
         }
+
     }
 }

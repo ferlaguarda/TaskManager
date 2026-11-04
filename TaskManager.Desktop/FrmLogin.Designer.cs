@@ -73,6 +73,7 @@
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(376, 27);
             txtEmail.TabIndex = 0;
+            txtEmail.Text = "pruebita@gmail.com";
             // 
             // txtPassword
             // 
@@ -82,6 +83,7 @@
             txtPassword.PasswordChar = '*';
             txtPassword.Size = new Size(376, 27);
             txtPassword.TabIndex = 1;
+            txtPassword.Text = "admin1234";
             // 
             // btnEntrar
             // 

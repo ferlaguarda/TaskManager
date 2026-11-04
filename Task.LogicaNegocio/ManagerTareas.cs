@@ -24,5 +24,16 @@ namespace Task.LogicaNegocio
             }
             return 0;
         }
+
+        public List<Tarea> CargarTareas(Guid idCuenta)
+        {
+            var tareas = _dalTarea.LeerTareas();
+            if (tareas is null)
+                return [];
+
+            return tareas
+                    .Where(t => t.IdCuenta == idCuenta)
+                    .ToList();
+        }
     }
 }

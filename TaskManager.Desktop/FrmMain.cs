@@ -36,7 +36,7 @@ namespace TaskManager.Desktop
 
         private void tsmiConsultarTarea_Click(object sender, EventArgs e)
         {
-            FrmListaTareas frmCrearTarea = new FrmListaTareas(_miCuenta.Tareas);
+            FrmListaTareas frmCrearTarea = new FrmListaTareas(_miCuenta.Id);
             frmCrearTarea.MdiParent = this;
             frmCrearTarea.Show();
         }
