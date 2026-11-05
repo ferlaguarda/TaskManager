@@ -29,5 +29,11 @@ namespace Tesk.Persistencia.DalArchivos
             return _fileProvider.LeerRegistros<Tarea>(filePath);
         }
 
+        public bool GuardarTareas(List<Tarea> tareas)
+        {
+            _fileProvider.GuardarRegistros(filePath, tareas);
+            return true;
+        }
+
     }
 }

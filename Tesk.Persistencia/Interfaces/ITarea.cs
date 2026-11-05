@@ -9,5 +9,7 @@ namespace Tesk.Persistencia.Interfaces
         List<Tarea> BuscarTareas(Guid idCuenta);
 
         List<Tarea> LeerTareas();
+
+        bool GuardarTareas(List<Tarea> tareas);
     }
 }

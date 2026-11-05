@@ -1,17 +1,20 @@
 ﻿using System.Data.Common;
 using Task.Entities;
 using Task.LogicaNegocio;
+using Tesk.Persistencia.Interfaces;
 
 namespace TaskManager.Desktop.FormTareas
 {
     public partial class FrmListaTareas : Form
     {
+        ManagerTareas _manager = new ManagerTareas();
+        Guid _idCuenta;
         public FrmListaTareas(Guid idCuenta)
         {
             InitializeComponent();
-            ManagerTareas manager = new ManagerTareas();
+            _idCuenta = idCuenta;
             Configure_DataGridview();
-            dgvTareas.DataSource = manager.CargarTareas(idCuenta);            
+            dgvTareas.DataSource = _manager.CargarTareas(_idCuenta);            
         }
 
         private void Configure_DataGridview()
@@ -58,7 +61,26 @@ namespace TaskManager.Desktop.FormTareas
 
             string columna = dgvTareas.Columns[args.ColumnIndex].Name;
             var tarea = dgvTareas.Rows[args.RowIndex].DataBoundItem as Tarea;
-
+            switch (columna)
+            {
+                case "btnDetalle":
+                    MessageBox.Show("Viendo detalle");
+                    break;
+                case "btnModificar":
+                    MessageBox.Show("Modificando ....");
+                    break;
+                case "btnBorrar":
+                    var confirmacion = MessageBox.Show("Esta seguro de eliminar la tarea?", "Confirmar",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (confirmacion == DialogResult.Yes)
+                        if (_manager.EliminarTarea(tarea.Id))
+                        {
+                            MessageBox.Show("Tarea eliminada correctamente");
+                            dgvTareas.DataSource = _manager.CargarTareas(_idCuenta);
+                        }
+                        else
+                            MessageBox.Show("No se pudo eliminar la tarea");
+                    break;
+            }
         }
 
     }
